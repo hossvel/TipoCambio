@@ -16,19 +16,33 @@ import com.devhoss.model.TipoCambio;
 import com.devhoss.model.Cambio;
 import com.devhoss.service.ITipoCambioService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 @RequestMapping(value = "/api/tipocambio")
+@Api(value="TipoCambio", description="Operaciones con Tipos de Cambio")
 public class TipoCambioController {
 
 	@Autowired
 	private ITipoCambioService iTipoCambioService;
 	
 	@PostMapping
+	@ApiOperation(value = "cambiar tipo")
 	public ResponseEntity<Cambio> change(@RequestBody Cambio request) {
 		Cambio cambio = iTipoCambioService.change(request);
-		return new ResponseEntity<>(cambio,HttpStatus.CREATED);
+		return new ResponseEntity<>(cambio,HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "obtiene la lista de Tipos de cambio")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "se obtuvo la lista correctamente"),
+			@ApiResponse(code = 401, message = "acceso no Autorizado"),
+			@ApiResponse(code = 404, message = "no se encontro el recurso buscado")
+	})
 	@GetMapping
 	public List<TipoCambio> findall() {
 		return iTipoCambioService.FindAll();
