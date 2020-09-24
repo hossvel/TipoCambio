@@ -16,19 +16,22 @@ public class TipoCambio {
 	private Long id;
 	private String monedaOrigen;
 	private String monedaDestino;
-	private Double cambio;
+	private Double tipoCambioOrigen;
+	private Double tipoCambioDestino;
 	
 	
 	
 	public TipoCambio() {
 		super();
 	}
-	public TipoCambio(Long id, String monedaOrigen, String monedaDestino, Double cambio) {
+	public TipoCambio(Long id, String monedaOrigen, String monedaDestino, Double tipoCambioOrigen,
+			Double tipoCambioDestino) {
 		super();
 		this.id = id;
 		this.monedaOrigen = monedaOrigen;
 		this.monedaDestino = monedaDestino;
-		this.cambio = cambio;
+		this.tipoCambioOrigen = tipoCambioOrigen;
+		this.tipoCambioDestino = tipoCambioDestino;
 	}
 	public Long getId() {
 		return id;
@@ -48,14 +51,18 @@ public class TipoCambio {
 	public void setMonedaDestino(String monedaDestino) {
 		this.monedaDestino = monedaDestino;
 	}
-	public Double getCambio() {
-		return cambio;
+	public Double getTipoCambioOrigen() {
+		return tipoCambioOrigen;
 	}
-	public void setCambio(Double cambio) {
-		this.cambio = cambio;
+	public void setTipoCambioOrigen(Double tipoCambioOrigen) {
+		this.tipoCambioOrigen = tipoCambioOrigen;
 	}
-	
-	
+	public Double getTipoCambioDestino() {
+		return tipoCambioDestino;
+	}
+	public void setTipoCambioDestino(Double tipoCambioDestino) {
+		this.tipoCambioDestino = tipoCambioDestino;
+	}
 	
 	
 	
