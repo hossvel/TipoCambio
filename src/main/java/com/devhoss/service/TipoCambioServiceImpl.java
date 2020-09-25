@@ -1,7 +1,8 @@
 package com.devhoss.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.devhoss.model.TipoCambio;
@@ -35,8 +36,11 @@ public class TipoCambioServiceImpl implements ITipoCambioService {
 
 
 	@Override
-	public Single<TipoCambioResponse> CambioMoneda(TipoCambioRequest request) {
+	public Single<?> CambioMoneda(TipoCambioRequest request) {
 
+		if(request.getMonto() < 0 || request.getMonedaOrigen().isEmpty() || request.getMonedaDestino().isEmpty()) 
+			return Single.just("Parametros Invalidos");
+		
 		return	Single.zip(
 				ObtenerTipoCambio(request.getMonedaOrigen()),
 				ConvertToSingle(request),
@@ -52,6 +56,7 @@ public class TipoCambioServiceImpl implements ITipoCambioService {
 	private TipoCambioResponse CalcularCambio(Cambio cambio) {
 		Double respuesta = 0.0;
 		Double tipoCambio = 0.0;
+		
 		if(cambio.getTipoCambioOrigen() < cambio.getTipoCambioDestino()) {
 			respuesta = (cambio.getMonto()/cambio.getTipoCambioDestino());
 			tipoCambio = cambio.getTipoCambioDestino();
@@ -81,5 +86,5 @@ public class TipoCambioServiceImpl implements ITipoCambioService {
 		return tipoSingle;
 
 	}
-
+	
 }

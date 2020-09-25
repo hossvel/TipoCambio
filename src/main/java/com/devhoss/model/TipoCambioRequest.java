@@ -1,8 +1,16 @@
 package com.devhoss.model;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class TipoCambioRequest {
+	
+	@ApiModelProperty(notes = "Monto a Cambiar", required = true)
 	private Double monto;
+	 
+	@ApiModelProperty(notes = "Moneda Origen es Obligatorio", required = true)
 	private String monedaOrigen;
+	
+	@ApiModelProperty(notes = "Moneda Destino es Obligatorio", required = true)
 	private String monedaDestino;
 	
 	public Double getMonto() {
