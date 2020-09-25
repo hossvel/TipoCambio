@@ -25,10 +25,10 @@ public class TipoCambioApplication {
 		@Override
 		public void run(String... args) throws Exception {
 
-			TipoCambio solesDolares = new TipoCambio(3L,"S","$",1.0,3.45);
+			TipoCambio solesDolares = new TipoCambio(3L,"S","$",1.0,3.35);
 			iTipoCambioService.Save(solesDolares);
 			
-			TipoCambio dolaresSoles = new TipoCambio(4L,"$","S",3.42,1.0);
+			TipoCambio dolaresSoles = new TipoCambio(4L,"$","S",3.39,1.0);
 			iTipoCambioService.Save(dolaresSoles);
 		}
 	}

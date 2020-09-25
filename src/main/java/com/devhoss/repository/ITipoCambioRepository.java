@@ -11,5 +11,5 @@ import com.devhoss.model.TipoCambio;
 public interface ITipoCambioRepository  extends JpaRepository<TipoCambio, String> {
 
 	List<TipoCambio> findByMonedaOrigen(String name);
-
+	
 }

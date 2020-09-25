@@ -1,21 +1,14 @@
 package com.devhoss.service;
 
-
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
 import com.devhoss.model.TipoCambio;
 import com.devhoss.model.Cambio;
-
 import com.devhoss.repository.ITipoCambioRepository;
-
-
 import io.reactivex.Observable;
-import io.reactivex.schedulers.Schedulers;
-
+import io.reactivex.Single;
 
 
 @Service
@@ -23,8 +16,6 @@ public class TipoCambioServiceImpl implements ITipoCambioService {
 
 	@Autowired
 	private ITipoCambioRepository iTipoCambioRepository;
-
-	//private static final Logger log = LoggerFactory.logger(caller)(TipoCambioServiceImpl.class);
 
 	@Override
 	public TipoCambio Save(TipoCambio tipoCambio) {
@@ -37,7 +28,7 @@ public class TipoCambioServiceImpl implements ITipoCambioService {
 	@Override
 	public Cambio change(Cambio request) {
 		TipoCambio tipo = iTipoCambioRepository.findByMonedaOrigen(request.getMonedaOrigen()).get(0);
-
+		
 		return CalcularCambio(tipo,request);
 
 	}
@@ -62,34 +53,35 @@ public class TipoCambioServiceImpl implements ITipoCambioService {
 	@Override
 	public Observable<TipoCambio> GetAll() {
 		return Observable.fromIterable(iTipoCambioRepository.findAll());
-		
-		
-		/*
-		 * return Observable.<TipoCambio>create(sub -> { Observable<TipoCambio>
-		 * listaTiposCambios = Observable.fromIterable(iTipoCambioRepository.findAll());
-		 * sub.onNext(listaTiposCambios); sub.onComplete(); }).doOnNext(p ->
-		 * System.out.print("Tipos cambio received successfully.")) .doOnError(e ->
-		 * System.out.print("Tipo cambio were received Error."));
-		 */
+	}
 
-		//Observable<TipoCambio> listaTiposCambio = Observable.fromIterable(iTipoCambioRepository.findByMonedaOrigen(request.getMonedaOrigen()))
-		//		.subscribeOn(Schedulers.newThread());
+	@Override
+	public Single<Cambio> CambioMoneda(Cambio request) {
 
+		return	Single.zip(
+				ObtenerTipoCambio(request.getMonedaOrigen()),
+				ConvertToSingle(request),
+
+				(o1,o2)->{
+					return CalcularCambio(o1,o2);
+
+				});
+
+	}
+
+	private Single<TipoCambio> ObtenerTipoCambio(String MonedaOrigen) {
+
+		Single<TipoCambio> tipoSingle = Single.just(iTipoCambioRepository.findByMonedaOrigen(MonedaOrigen).get(0));
+		return tipoSingle;
 
 	}
 
 
-	public Cambio change2(Cambio request) {
+	private Single<Cambio> ConvertToSingle(Cambio request) {
 
-		Observable<TipoCambio> listaTiposCambio = Observable.fromIterable(iTipoCambioRepository.findByMonedaOrigen(request.getMonedaOrigen()))
-				.subscribeOn(Schedulers.newThread());
+		Single<Cambio> tipoSingle = Single.just(request);
+		return tipoSingle;
 
-
-		//return CalcularCambio(tipo,request);
-		return null;
 	}
-
-
-
 
 }

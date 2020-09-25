@@ -36,9 +36,13 @@ public class TipoCambioController {
 
 	@PostMapping
 	@ApiOperation(value = "cambiar tipo")
-	public ResponseEntity<Cambio> change(@RequestBody Cambio request) {
-		Cambio cambio = iTipoCambioService.change(request);
-		return new ResponseEntity<>(cambio,HttpStatus.OK);
+	public Single<Cambio> change(@RequestBody Cambio request) {
+		//Cambio cambio = iTipoCambioService.change(request);
+		//return new ResponseEntity<>(cambio,HttpStatus.OK);
+		
+		return  iTipoCambioService.CambioMoneda(request).subscribeOn(Schedulers.io());
+		
+		
 	}
 
 	@ApiOperation(value = "obtiene la lista de Tipos de cambio")
@@ -49,11 +53,6 @@ public class TipoCambioController {
 	})	
 	@GetMapping	
 	public Single<ResponseEntity<Observable<?>>> FindAll() {
-
-		//return  iTipoCambioService.GetAll().subscribeOn(Schedulers.io());
-
-		//return new ResponseEntity<>(list,HttpStatus.OK);
-
 
 		return Single.just(ResponseEntity.ok() .contentType(MediaType.APPLICATION_JSON) 
 				.body(
