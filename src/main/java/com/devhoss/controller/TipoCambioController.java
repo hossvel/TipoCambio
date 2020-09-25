@@ -1,20 +1,16 @@
 package com.devhoss.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devhoss.model.TipoCambio;
-import com.devhoss.model.Cambio;
+import com.devhoss.model.TipoCambioRequest;
 import com.devhoss.service.ITipoCambioService;
 
 import io.swagger.annotations.Api;
@@ -36,13 +32,15 @@ public class TipoCambioController {
 
 	@PostMapping
 	@ApiOperation(value = "cambiar tipo")
-	public Single<Cambio> change(@RequestBody Cambio request) {
-		//Cambio cambio = iTipoCambioService.change(request);
-		//return new ResponseEntity<>(cambio,HttpStatus.OK);
-		
-		return  iTipoCambioService.CambioMoneda(request).subscribeOn(Schedulers.io());
-		
-		
+	public Single<ResponseEntity<Single<?>>> Change(@RequestBody TipoCambioRequest request) {
+
+		return Single.just(ResponseEntity.ok() .contentType(MediaType.APPLICATION_JSON) 
+				.body(
+						iTipoCambioService.CambioMoneda(request)
+						.subscribeOn(Schedulers.io())
+						)
+				);
+
 	}
 
 	@ApiOperation(value = "obtiene la lista de Tipos de cambio")
@@ -54,12 +52,13 @@ public class TipoCambioController {
 	@GetMapping	
 	public Single<ResponseEntity<Observable<?>>> FindAll() {
 
-		return Single.just(ResponseEntity.ok() .contentType(MediaType.APPLICATION_JSON) 
+		return Single.just(ResponseEntity.ok() 
+				.contentType(MediaType.APPLICATION_JSON) 
 				.body(
-						iTipoCambioService.GetAll().subscribeOn(Schedulers.io())
+						iTipoCambioService.GetAll()
+						.subscribeOn(Schedulers.io())
 						)
 				);
-
 	}
 
 

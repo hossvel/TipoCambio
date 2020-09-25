@@ -5,8 +5,43 @@ public class Cambio {
 	private Double monto;
 	private String monedaOrigen;
 	private String monedaDestino;
-	private Double tipoCambio;
 	
+	private Double tipoCambioOrigen;
+	private Double tipoCambioDestino;
+
+	public Cambio() {}
+
+
+	public Cambio(Double monto, String monedaOrigen, String monedaDestino, Double tipoCambioOrigen,
+			Double tipoCambioDestino) {
+		super();
+		this.monto = monto;
+		this.monedaOrigen = monedaOrigen;
+		this.monedaDestino = monedaDestino;
+		this.tipoCambioOrigen = tipoCambioOrigen;
+		this.tipoCambioDestino = tipoCambioDestino;
+	}
+
+
+
+	public Double getTipoCambioOrigen() {
+		return tipoCambioOrigen;
+	}
+
+
+
+	public void setTipoCambioOrigen(Double tipoCambioOrigen) {
+		this.tipoCambioOrigen = tipoCambioOrigen;
+	}
+
+	public Double getTipoCambioDestino() {
+		return tipoCambioDestino;
+	}
+
+	public void setTipoCambioDestino(Double tipoCambioDestino) {
+		this.tipoCambioDestino = tipoCambioDestino;
+	}
+
 	public Double getMonto() {
 		return monto;
 	}
@@ -25,12 +60,6 @@ public class Cambio {
 	public void setMonedaDestino(String monedaDestino) {
 		this.monedaDestino = monedaDestino;
 	}
-	public Double getTipoCambio() {
-		return tipoCambio;
-	}
-	public void setTipoCambio(Double tipoCambio) {
-		this.tipoCambio = tipoCambio;
-	}
 	
-	
+
 }
