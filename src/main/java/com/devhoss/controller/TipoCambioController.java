@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,9 @@ import io.swagger.annotations.ApiOperation;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 
 @RestController
 @RequestMapping(value = "/api/tipocambio")
@@ -29,30 +33,43 @@ public class TipoCambioController {
 
 	@Autowired
 	private ITipoCambioService iTipoCambioService;
-	
+
 	@PostMapping
 	@ApiOperation(value = "cambiar tipo")
 	public ResponseEntity<Cambio> change(@RequestBody Cambio request) {
 		Cambio cambio = iTipoCambioService.change(request);
 		return new ResponseEntity<>(cambio,HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "obtiene la lista de Tipos de cambio")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "se obtuvo la lista correctamente"),
 			@ApiResponse(code = 401, message = "acceso no Autorizado"),
 			@ApiResponse(code = 404, message = "no se encontro el recurso buscado")
-	})
-	@GetMapping
-	public List<TipoCambio> findall() {
-		return iTipoCambioService.FindAll();
+	})	
+	@GetMapping	
+	public Single<ResponseEntity<Observable<?>>> FindAll() {
+
+		//return  iTipoCambioService.GetAll().subscribeOn(Schedulers.io());
+
+		//return new ResponseEntity<>(list,HttpStatus.OK);
+
+
+		return Single.just(ResponseEntity.ok() .contentType(MediaType.APPLICATION_JSON) 
+				.body(
+						iTipoCambioService.GetAll().subscribeOn(Schedulers.io())
+						)
+				);
+
 	}
-	
+
+
+
 	/*
 	@PutMapping
 	public ResponseEntity<TipoCambio> create(@RequestBody TipoCambio tipoCambio) {
 		TipoCambio savedPersona = iTipoCambioService.Save(tipoCambio);
 		return new ResponseEntity<>(savedPersona,HttpStatus.CREATED);
 	}
-	*/
+	 */
 }
