@@ -96,4 +96,11 @@ public class TipoCambioServiceImpl implements ITipoCambioService {
 
 	}
 
+
+	@Override
+	public Single<TipoCambio> Update(TipoCambio tipoCambio) {
+		TipoCambio savedTipoCambio= iTipoCambioRepository.save(tipoCambio);
+		return Single.just(savedTipoCambio);
+	}
+
 }

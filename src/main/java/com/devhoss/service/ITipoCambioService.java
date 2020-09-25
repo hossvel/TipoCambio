@@ -14,4 +14,6 @@ public interface ITipoCambioService {
 	public Observable<TipoCambio> GetAll();
 	
 	public Single<?> CambioMoneda(TipoCambioRequest request);
+	
+	public Single<TipoCambio> Update(TipoCambio tipoCambio);
 }

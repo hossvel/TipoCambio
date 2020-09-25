@@ -73,9 +73,16 @@ public class TipoCambioController {
 	
 	@PutMapping
 	@ApiOperation(value = "Servicio que permite Actualizar una configuracion de tipo de cambio")
-	public ResponseEntity<TipoCambio> Update(@RequestBody TipoCambio tipoCambio) {
-		TipoCambio savedPersona = iTipoCambioService.Save(tipoCambio);
-		return new ResponseEntity<>(savedPersona,HttpStatus.OK);
+	public Single<ResponseEntity<Single<?>>> Update(@RequestBody TipoCambio tipoCambio) {
+		
+		
+		return Single.just(ResponseEntity.ok() .contentType(MediaType.APPLICATION_JSON) 
+				.body(
+						 iTipoCambioService.Update(tipoCambio)
+						.subscribeOn(Schedulers.io())
+						)
+				);
+		
 	}
 	 
 }
