@@ -32,6 +32,11 @@ public class TipoCambioController {
 
 	@PostMapping
 	@ApiOperation(value = "cambiar tipo")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "se hizo el cambio exitosamente"),
+			@ApiResponse(code = 401, message = "acceso no Autorizado"),
+			@ApiResponse(code = 404, message = "no se encontro el recurso buscado")
+	})	
 	public Single<ResponseEntity<Single<?>>> Change(@RequestBody TipoCambioRequest request) {
 
 		return Single.just(ResponseEntity.ok() .contentType(MediaType.APPLICATION_JSON) 
@@ -43,13 +48,15 @@ public class TipoCambioController {
 
 	}
 
-	@ApiOperation(value = "obtiene la lista de Tipos de cambio")
+	
+	@GetMapping	
+	@ApiOperation(value = "obtiene todos los tipos de cambio configurados")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "se obtuvo la lista correctamente"),
 			@ApiResponse(code = 401, message = "acceso no Autorizado"),
 			@ApiResponse(code = 404, message = "no se encontro el recurso buscado")
 	})	
-	@GetMapping	
+	
 	public Single<ResponseEntity<Observable<?>>> FindAll() {
 
 		return Single.just(ResponseEntity.ok() 

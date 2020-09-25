@@ -40,23 +40,32 @@ public class TipoCambioServiceImpl implements ITipoCambioService {
 
 		if(request.getMonto() < 0 || request.getMonedaOrigen().isEmpty() || request.getMonedaDestino().isEmpty()) 
 			return Single.just("Parametros Invalidos");
-		
-		return	Single.zip(
-				ObtenerTipoCambio(request.getMonedaOrigen()),
-				ConvertToSingle(request),
 
-				(o,r)->{
+		TipoCambio tipoCambioConfigurado = ObtenerTipoCambio(request.getMonedaOrigen(),request.getMonedaDestino());
+		if(tipoCambioConfigurado.getId() == null)
+			return Single.just("No se Pudo Encontra una configuracion para las Monedas Ingresadas");
 
-					return CalcularCambio(new Cambio(r.getMonto(),o.getMonedaOrigen(),o.getMonedaDestino(),o.getTipoCambioOrigen(),o.getTipoCambioDestino()));
+		try {
+			return	Single.zip(
+					Single.just(tipoCambioConfigurado),
+					ConvertToSingle(request),
 
-				});
+					(o,r)->{
+						return CalcularCambio(new Cambio(r.getMonto(),o.getMonedaOrigen(),o.getMonedaDestino(),o.getTipoCambioOrigen(),o.getTipoCambioDestino()));
+					});
+		} catch (Exception ex) {
+			return Single.just(ex.getMessage());
+		}
+
+
+
 
 	}
 
 	private TipoCambioResponse CalcularCambio(Cambio cambio) {
 		Double respuesta = 0.0;
 		Double tipoCambio = 0.0;
-		
+
 		if(cambio.getTipoCambioOrigen() < cambio.getTipoCambioDestino()) {
 			respuesta = (cambio.getMonto()/cambio.getTipoCambioDestino());
 			tipoCambio = cambio.getTipoCambioDestino();
@@ -70,13 +79,11 @@ public class TipoCambioServiceImpl implements ITipoCambioService {
 	}
 
 
-	private Single<TipoCambio> ObtenerTipoCambio(String MonedaOrigen) {
+	private TipoCambio ObtenerTipoCambio(String MonedaOrigen,String MonedaDestino) {
 
-		Single<TipoCambio> tipoSingle = Single.just(iTipoCambioRepository.findByMonedaOrigen(MonedaOrigen)
+		return iTipoCambioRepository.findAll()
 				.stream()
-				.findFirst()
-				.orElse(null));
-		return tipoSingle;
+				.filter(x -> x.getMonedaOrigen().equals(MonedaOrigen) && x.getMonedaDestino().equals(MonedaDestino)).findFirst().orElse(new TipoCambio());
 
 	}
 
@@ -86,5 +93,5 @@ public class TipoCambioServiceImpl implements ITipoCambioService {
 		return tipoSingle;
 
 	}
-	
+
 }
