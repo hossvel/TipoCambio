@@ -1,15 +1,17 @@
 package com.devhoss.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.devhoss.model.TipoCambio;
 import com.devhoss.model.TipoCambioRequest;
 import com.devhoss.service.ITipoCambioService;
 
@@ -31,7 +33,7 @@ public class TipoCambioController {
 	private ITipoCambioService iTipoCambioService;
 
 	@PostMapping
-	@ApiOperation(value = "cambiar tipo")
+	@ApiOperation(value = "Servicio que permite aplicar el tipo de Cambio a un monto")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "se hizo el cambio exitosamente"),
 			@ApiResponse(code = 401, message = "acceso no Autorizado"),
@@ -68,15 +70,12 @@ public class TipoCambioController {
 				);
 	}
 
-
 	
-
-
-	/*
 	@PutMapping
-	public ResponseEntity<TipoCambio> create(@RequestBody TipoCambio tipoCambio) {
+	@ApiOperation(value = "Servicio que permite Actualizar una configuracion de tipo de cambio")
+	public ResponseEntity<TipoCambio> Update(@RequestBody TipoCambio tipoCambio) {
 		TipoCambio savedPersona = iTipoCambioService.Save(tipoCambio);
-		return new ResponseEntity<>(savedPersona,HttpStatus.CREATED);
+		return new ResponseEntity<>(savedPersona,HttpStatus.OK);
 	}
-	 */
+	 
 }

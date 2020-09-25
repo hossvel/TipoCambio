@@ -10,6 +10,8 @@ import com.devhoss.model.TipoCambioRequest;
 import com.devhoss.model.TipoCambioResponse;
 import com.devhoss.model.Cambio;
 import com.devhoss.repository.ITipoCambioRepository;
+import com.devhoss.utils.Constantes;
+
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
@@ -39,11 +41,11 @@ public class TipoCambioServiceImpl implements ITipoCambioService {
 	public Single<?> CambioMoneda(TipoCambioRequest request) {
 
 		if(request.getMonto() < 0 || request.getMonedaOrigen().isEmpty() || request.getMonedaDestino().isEmpty()) 
-			return Single.just("Parametros Invalidos");
+			return Single.just(Constantes.Mensaje_Datos_Ingreso);
 
 		TipoCambio tipoCambioConfigurado = ObtenerTipoCambio(request.getMonedaOrigen(),request.getMonedaDestino());
 		if(tipoCambioConfigurado.getId() == null)
-			return Single.just("No se Pudo Encontra una configuracion para las Monedas Ingresadas");
+			return Single.just(Constantes.Mensaje_Configuracion_No_Existe);
 
 		try {
 			return	Single.zip(
