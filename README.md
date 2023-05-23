@@ -12,4 +12,5 @@ curl localhost:8080/api/tipocambio
 
 # Sonarqube
 mvn clean package sonar:sonar
-mvn sonar:sonar -Dsonar.login=<your-token>
+
+mvn sonar:sonar -Dsonar.login=your-token
