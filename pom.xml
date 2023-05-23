@@ -70,6 +70,11 @@
 			<version>0.9.0</version>
 		</dependency>
 
+<dependency>
+   <groupId>org.sonarsource.scanner.maven</groupId>
+   <artifactId>sonar-maven-plugin</artifactId>
+   <version>3.2</version>
+</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -103,5 +108,23 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+   <profile>
+      <id>sonar</id>
+      <activation>
+      <activeByDefault>true</activeByDefault>
+      </activation>
+         <properties>
+         <!-- Optional URL to server. Default value is   http://192.168.2.174:9000     -->
+         <sonar.host.url>
+          http://localhost:9000
+         </sonar.host.url>		
+         <sonar.login>
+          squ_ea22728f96f5a522f5993b7ddbadcccc03284fa1
+         </sonar.login>
+      </properties>
+   </profile>
+</profiles>
 
 </project>
